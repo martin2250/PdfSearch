@@ -29,7 +29,7 @@
                     </GridView>
                 </ListView.View>
             </ListView>
-            <TextBox x:Name="textBoxFilter" Height="23" Margin="51,38,88.4,0" VerticalContentAlignment="Center" VerticalAlignment="Top">
+            <TextBox x:Name="textBoxFilter" Height="23" Margin="51,38,10.4,0" VerticalContentAlignment="Center" VerticalAlignment="Top" TextChanged="textBoxFilter_TextChanged">
                 <TextBox.ToolTip>
                     <TextBlock>
 						Match all words
@@ -45,7 +45,6 @@
 				</TextBox.ToolTip>
 			</TextBox>
             <Label Content="Filter:" HorizontalAlignment="Left" Margin="8,38,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="23"/>
-            <Button x:Name="buttonRefresh" Content="Refresh" HorizontalAlignment="Right" Margin="0,38,10.4,0" VerticalAlignment="Top" Width="73" Height="22" Click="buttonRefresh_Click"/>
         </Grid>
         <Ellipse x:Name="ellipseLoading" Width="200" Height="200" StrokeThickness="20" RenderTransformOrigin="0.5,0.5" Visibility="Hidden">
             <Ellipse.RenderTransform>

@@ -166,11 +166,6 @@ namespace PdfSearch
 			statusMatched.Content = listView.Items.Count.ToString();
 		}
 
-		private void buttonRefresh_Click(object sender, RoutedEventArgs e)
-		{
-			Filter();
-		}
-
 		private void listView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
 			PdfFileInfo i = listView.SelectedItem as PdfFileInfo;
@@ -179,6 +174,11 @@ namespace PdfSearch
 			{
 				System.Diagnostics.Process.Start(i.Path);
 			}
+		}
+
+		private void textBoxFilter_TextChanged(object sender, TextChangedEventArgs e)
+		{
+			Filter();
 		}
 	}
 }
