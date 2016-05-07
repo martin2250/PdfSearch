@@ -63,7 +63,7 @@
 			</TextBox>
             <Label Content="Filter:" HorizontalAlignment="Left" Margin="8,38,0,0" VerticalAlignment="Top" VerticalContentAlignment="Center" Height="23"/>
         </Grid>
-        <Ellipse x:Name="ellipseLoading" Width="200" Height="200" StrokeThickness="20" RenderTransformOrigin="0.5,0.5" Visibility="Hidden">
+        <Ellipse Grid.Row="1" x:Name="ellipseLoading" Width="200" Height="200" StrokeThickness="20" RenderTransformOrigin="0.5,0.5" Visibility="Hidden">
             <Ellipse.RenderTransform>
                 <TransformGroup>
                     <ScaleTransform/>
