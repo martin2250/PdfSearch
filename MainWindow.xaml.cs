@@ -1,21 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.IO;
 using System.Windows.Media.Animation;
-using System.Collections.ObjectModel;
 using PdfExtract;
 using System.Text.RegularExpressions;
 
@@ -259,6 +251,18 @@ namespace PdfSearch
 			{
 				ShowInfo("Could not write File");
 			}
+		}
+
+		private void MenuItemShowText_Click(object sender, RoutedEventArgs e)
+		{
+			string file = Path.GetTempFileName() + ".txt";
+
+			try
+			{
+				File.WriteAllText(file, ((PdfFileInfo)listView.SelectedItem).Content);
+				System.Diagnostics.Process.Start(file);
+			}
+			catch { }
 		}
 	}
 }

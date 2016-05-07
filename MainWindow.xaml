@@ -35,6 +35,16 @@
                         <GridViewColumn Header="Full Path" DisplayMemberBinding="{Binding Path}" Width="200"/>
                     </GridView>
                 </ListView.View>
+                <ListView.Resources>
+                    <ContextMenu x:Key="ItemContextMenu">
+                        <MenuItem Header="Show Text" Click="MenuItemShowText_Click"/>
+                    </ContextMenu>
+                </ListView.Resources>
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}" >
+                        <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+                    </Style>
+                </ListView.ItemContainerStyle>
             </ListView>
             <TextBox x:Name="textBoxFilter" Height="23" Margin="51,38,10.4,0" VerticalContentAlignment="Center" VerticalAlignment="Top" TextChanged="textBoxFilter_TextChanged">
                 <TextBox.ToolTip>
