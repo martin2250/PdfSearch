@@ -11,10 +11,17 @@
 		MinHeight="350" MinWidth="525">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid x:Name="gridMain">
+        <Menu IsMainMenu="True">
+            <MenuItem Header="File">
+                <MenuItem Header="Save Index to File" Click="MenuItemSave_Click"/>
+                <MenuItem Header="Load Index from File" Click="MenuItemLoad_Click"/>
+            </MenuItem>
+		</Menu>
+        <Grid x:Name="gridMain" Grid.Row="1">
             <TextBox x:Name="textBoxPath" Height="23" Margin="50,10,163.4,0" VerticalAlignment="Top" VerticalContentAlignment="Center"/>
             <Label Content="Path:" Height="23" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"  VerticalContentAlignment="Center"/>
             <Button x:Name="buttonBrowse" Content="Browse" Height="23" HorizontalAlignment="Right" Margin="0,10,105.4,0" VerticalAlignment="Top" Width="53"  VerticalContentAlignment="Center" Click="buttonBrowse_Click"/>
@@ -61,7 +68,7 @@
                 </LinearGradientBrush>
             </Ellipse.Stroke>
         </Ellipse>
-        <StatusBar Grid.Row="1" Height="23">
+        <StatusBar Grid.Row="2" Height="23">
             <StatusBarItem Content="Files Indexed: "/>
             <StatusBarItem x:Name="statusIndexed" Width="40" Content="0"/>
             <StatusBarItem Content="Files Match: "/>

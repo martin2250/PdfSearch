@@ -33,6 +33,10 @@ namespace PdfSearch
 	public partial class MainWindow : Window
 	{
 		FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
+
+		OpenFileDialog ofd = new OpenFileDialog() { Filter = "Index Files|*.index" };
+		SaveFileDialog sfd = new SaveFileDialog() { Filter = "Index Files|*.index" };
+
 		Storyboard storyBoardAnimateInfo = new Storyboard();
 
 		List<PdfFileInfo> Files = new List<PdfFileInfo>();
@@ -43,6 +47,9 @@ namespace PdfSearch
 
 			folderBrowser.SelectedPath = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
 			textBoxPath.Text = folderBrowser.SelectedPath;
+
+			ofd.FileOk += Ofd_FileOk;
+			sfd.FileOk += Sfd_FileOk;
 
             var a = new DoubleAnimation
 			{
@@ -179,6 +186,79 @@ namespace PdfSearch
 		private void textBoxFilter_TextChanged(object sender, TextChangedEventArgs e)
 		{
 			Filter();
+		}
+
+
+
+		private void MenuItemLoad_Click(object sender, RoutedEventArgs e)
+		{
+			ofd.ShowDialog();
+		}
+
+		private void Ofd_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			try
+			{
+				List<PdfFileInfo> files = new List<PdfFileInfo>();
+
+				BinaryReader r = new BinaryReader(File.OpenRead(ofd.FileName));
+
+				int count = r.ReadInt32();
+
+				while(count-- > 0)
+				{
+					PdfFileInfo info = new PdfFileInfo();
+					info.Path = r.ReadString();
+					info.FileName = r.ReadString();
+					info.Size = r.ReadString();
+					info.Content = r.ReadString();
+					info.IndexedCharacters = info.Content.Length.ToString();
+
+					files.Add(info);
+				}
+
+				r.Close();
+
+				Files = files;
+
+				Filter();
+
+				ShowInfo("Loaded Index");
+			}
+			catch
+			{
+				ShowInfo("Could not read File");
+			}			
+		}
+
+		private void MenuItemSave_Click(object sender, RoutedEventArgs e)
+		{
+			sfd.ShowDialog();
+		}
+
+		private void Sfd_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+			try
+			{
+				BinaryWriter w = new BinaryWriter(File.OpenWrite(sfd.FileName));
+
+				w.Write(Files.Count);
+
+				foreach(PdfFileInfo info in Files)
+				{
+					w.Write(info.Path);
+					w.Write(info.FileName);
+					w.Write(info.Size);
+					w.Write(info.Content);
+				}
+
+				w.Close();
+				ShowInfo("Saved Index");
+			}
+			catch
+			{
+				ShowInfo("Could not write File");
+			}
 		}
 	}
 }
