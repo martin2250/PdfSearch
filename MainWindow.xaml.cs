@@ -10,6 +10,7 @@ using System.IO;
 using System.Windows.Media.Animation;
 using PdfExtract;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace PdfSearch
 {
@@ -32,6 +33,9 @@ namespace PdfSearch
 		Storyboard storyBoardAnimateInfo = new Storyboard();
 
 		List<PdfFileInfo> Files = new List<PdfFileInfo>();
+
+		Task taskFilter;
+		CancellationTokenSource cancelFilter;
 
 		public MainWindow()
 		{
@@ -126,10 +130,8 @@ namespace PdfSearch
 
 		Regex patternParser = new Regex("(\\\"[^\\\"]+\\\"|[\\S]+)");
 
-		private void Filter()
+		private void Filter_Work(string pattern)
 		{
-			string pattern = textBoxFilter.Text.ToLower();
-
 			List<Regex> filters = new List<Regex>();
 
 			foreach (Match filter in patternParser.Matches(pattern))
@@ -137,20 +139,27 @@ namespace PdfSearch
 				filters.Add(new Regex(Regex.Escape(filter.Value.Trim('"')).Replace("\\?", ".?").Replace("\\*", ".*")));
 			}
 
-			listView.Items.Clear();
-
+			Dispatcher.Invoke(()=>listView.Items.Clear());
+			
 			foreach (PdfFileInfo info in Files)
 			{
+				if (cancelFilter.Token.IsCancellationRequested)
+					return;
+
 				if (!filters.Any())
 				{
-					listView.Items.Add(info);
+					Dispatcher.Invoke(() => listView.Items.Add(info));
+					Dispatcher.Invoke(() => statusMatched.Content = listView.Items.Count.ToString());
 					continue;
 				}
 
 				bool ok = true;
 
-				foreach(Regex filter in filters)
+				foreach (Regex filter in filters)
 				{
+					if (cancelFilter.Token.IsCancellationRequested)
+						return;
+
 					if (!filter.IsMatch(info.Content))
 					{
 						ok = false;
@@ -158,11 +167,29 @@ namespace PdfSearch
 					}
 				}
 
-				if(ok)
-					listView.Items.Add(info);
+				if (ok)
+				{
+					Dispatcher.Invoke(() => listView.Items.Add(info));
+					Dispatcher.Invoke(() => statusMatched.Content = listView.Items.Count.ToString());
+				}
 			}
 
-			statusMatched.Content = listView.Items.Count.ToString();
+			taskFilter = null;
+		}
+
+		private async void Filter()
+		{
+			if(taskFilter != null)
+			{
+				cancelFilter.Cancel();
+				await taskFilter;
+			}
+
+			string pattern = textBoxFilter.Text.ToLower();
+
+			cancelFilter = new CancellationTokenSource();
+			taskFilter = new Task(()=>Filter_Work(pattern));
+			taskFilter.Start();
 		}
 
 		private void listView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -179,8 +206,6 @@ namespace PdfSearch
 		{
 			Filter();
 		}
-
-
 
 		private void MenuItemLoad_Click(object sender, RoutedEventArgs e)
 		{
