@@ -38,6 +38,7 @@
                 <ListView.Resources>
                     <ContextMenu x:Key="ItemContextMenu">
                         <MenuItem Header="Show Text" Click="MenuItemShowText_Click"/>
+                        <MenuItem Header="Open Folder" Click="MenuItemOpenFolder_Click"/>
                     </ContextMenu>
                 </ListView.Resources>
                 <ListView.ItemContainerStyle>

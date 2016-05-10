@@ -278,6 +278,12 @@ namespace PdfSearch
 			}
 		}
 
+		private void MenuItemOpenFolder_Click(object sender, RoutedEventArgs e)
+		{
+			string path = new FileInfo(((PdfFileInfo)listView.SelectedItem).Path).DirectoryName;
+			System.Diagnostics.Process.Start(path);
+		}
+
 		private void MenuItemShowText_Click(object sender, RoutedEventArgs e)
 		{
 			string file = Path.GetTempFileName() + ".txt";
