@@ -4,8 +4,8 @@ A simple tool to search multiple pdf files for patterns
 I needed a quick way to search text in a large number of pdfs for university, so I created this.
 
 ###Usage:
-Select a path and click "Create Index"
-Enter your seach string
+Select a path and click "Create Index"  
+Enter your seach string  
 Double click on a file to open it with the default pdf viewer
 
 ###Search patterns:  
